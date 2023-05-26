@@ -118,3 +118,4 @@ docker commit --message "add merik.txt" --author merik" c1 myimage:v1.0.0
 Best Pratices:
 
 lint
+distroless
