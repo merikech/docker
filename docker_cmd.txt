@@ -1,0 +1,119 @@
+List des commandes docker:
+
+docker start docker-id
+docker stop docker_id
+
+open terminal on output of the process:
+
+docker run -ti --rm --name web nginx:latest
+
+Remove the container once the process is stopped:
+
+docker run -ti --rm --name OS debian: latest
+
+Detached mode:
+docker run -d --rm --name nginx:latest
+
+deocker run -d --name web --hostname web nginx:latest
+
+docker run -d --name web --dns 8.8.8.8 nginx:latest
+
+docker run -d --name webserver -p 8080:80 nginx
+
+docker ps -q
+docker rm -f $(docker ps -qa)
+
+Docker volumes:
+
+docker volume ls 
+docker volume create mynginx
+
+docker run -d --name c1 -c mynginx:/usr/share/nginx/html nginx:latest
+
+docker volume inspect mynginx
+
+
+docker volume rm  mynginx
+
+Docker volumes types:
+
+Bind:
+
+docker run -d --name webserver --mount type=bind,source=/data,destination=/usr/share/nginx/html nginx:latest
+
+
+
+
+
+docker inspect  webserver
+
+docker inspect --format "{{.Mounts}}" webserver
+
+Volume:
+
+Volume create volume mymount
+
+docker run -d --name webserver --mount type=volume,src=mymount,destination=/usr/share/nginx/html/ nginx:latest
+
+
+Tmpfs:
+
+docker run -d --name webserver --mount type=tmpfs,destination=/usr/share/nginx/html/ nginx:latest
+
+
+Network:
+
+docker run --name web -p 8080:80 nginx:latest
+docker run --name web -P nginx:latest
+
+docker run --name web --expose 80 nginx:latest
+
+docker network ls
+
+docker network inspect network_id
+
+Create network:
+
+docker network create --driver=bridge --subnet=192.168.0.0/24 merik0
+
+docker network ls
+
+docker network inspect merik0
+
+
+docker run -d --name c1 --network merik0 nginx:latest
+
+
+Connecter un conteneur a un réseau personaliser:
+
+docker network connect merik0 c1
+docker network connect merik0 c2
+
+
+docker run -d --name c1 --network host nginx:latest
+
+/etc/docker/daemon.json
+
+{
+    "bip": "10.10.0.0/16"
+}
+
+Create network with customized brige name:
+
+docker network create --driver=bridge --subnet=192.168.2.0/24 -o com.docker.network.bridge.name="merik0" merik0
+
+Create network namespace:
+
+ip netns ls
+ip netns add mynet
+ip netns exec mynet python3 -m http.server 8080
+ip netns exec mynet ip link set lo up
+ip netns exec mynet curl 127.0.0.1:8080
+
+
+Docker commit:
+
+docker commit --message "add merik.txt" --author merik" c1 myimage:v1.0.0 
+
+
+
